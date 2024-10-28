@@ -1,0 +1,42 @@
+step 1: create Godaddy account and purchase a simple domain for ex: testing24.xyz
+step 2: go to my product and choose ur domain and change the name server which is created by hosting zones in route 53 resource
+step 3: after setting up nameserver in AWS launch ec2 instance and route 53 while hosting a zone mention the ipaddress of ec2 instance(public ip ) in the description.
+step 4: sudo apt update && sudo apt-get install nginx -y (install nginx and update system)
+step 5: sudo apt install certbot python3-certbot-nginx (install Certbot and its Nginx plugin which can be used to secure Nginx with Check that the Nginx configuration file has a server_name directive that matches the domain you want to secure)
+step 6:  sudo mkdir -p /var/www/testing24.xyz/html (make directory including parent directory that doesn't exist and it will prevent the errors)
+step 7: chown -R $USER:$USER /var/www/testing24.xyz/html (changing ownership of file or directory)
+step 8: sudo chmod -R 755 /var/www/testing24.xyz (assign the file permission)
+step 9: vim /var/www/testing24.xyz/html/index.html (to include some html source )
+<html>
+    <head>
+        <title>Welcome to testing24.xyz.in!</title>
+    </head>
+    <body>
+        <h1>Success! The testing24.xyz.in server block is working!</h1>
+    </body>
+</html>
+
+step 10 : sudo vim /etc/nginx/sites-available/testing24.co.xyz (setting up nginx server)
+ server {
+        listen 80;
+        listen [::]:80;
+        root /var/www/testing24.xyz/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name testing24.xyz www.testing24.xyz;
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+
+step 11: sudo ln -s /etc/nginx/sites-available/testing24.xyz /etc/nginx/sites-enabled/ (make the sites directory enable of nginx)
+step 12: sudo nginx -t (testing the nginx server) you will get successful
+atep 13: sudo systemctl restart nginx (restart the nginx )
+step 14: sudo certbot certonly \
+  --agree-tos \ (Agree to the Let's Encrypt terms of service) 
+  --email jnaneshwar.jnanibalu@gmail.com \ (Provide an email address for the certificate owner contact and renewal notices.)
+  --manual \ (Perform a manual DNS challenge, where you'll need to create a TXT record in your domain's DNS settings.)
+  --preferred-challenges=dns \ (Choose the DNS challenge as the preferred authentication method.)
+  -d *.testing24.xyz \ (Specify the domain names for which the certificate should be obtained.)
+  --server https://acme-v02.api.letsencrypt.org/directory (setup cerbot with ssl certificate to encrypt nginx and directory encryption)
+step 15 : make the entry of dns txt in dns records of aws
+step 16:   certbot --nginx (FOR HTTP TO HTTPS FORWARDING RUN THE BELOW COMMAND )

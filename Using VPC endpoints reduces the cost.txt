@@ -1,0 +1,24 @@
+Using VPC endpoints reduces the cost of our infrastructure for private subnet instances
+
+cause : when we use the NAT cloud provider will cost us some $/hr and also transmission cost if we are using other services like s3 bucket so to avoid this we use the concept called vpc endpoints. 
+ 
+lets make project which uses the endpoints to reduce costing
+
+step1 : create vpc including  1 public subnet & 1 private subnet
+
+step 2: launch ec2-instances like 1st instance in public-subnet and 2nd in private-subnet(without public ip address)
+
+step 3: for 2nd instance we cant connect without public ip so to connect this instance we use 1st instance as a jump server and using private ip we will be loged in 2nd            
+        instance 
+
+step 4: now our two instances are up now & try to access s3 bucket from 1st instance and we successfully download the bucket but from 2nd instance we cant able to         
+        download s3 bucket
+step 5: to solve this problem we create NAT for public subnet and then we will be able to download the s3 bucket 
+
+ but in the above project excercise we have used the NAT for accessing s3 bucket but this will increase our infra cost and to reduce we have to create endpoints 
+
+
+step 1: create endpoint (gateway endpoint) please note that attach the private subnet to it & select s3 as service
+
+step 2 : restart 2 nd instance, tried to access s3 from private instance & successfully downloaded s3 bucket. 
+      
